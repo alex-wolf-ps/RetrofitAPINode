@@ -16,7 +16,7 @@ var ideas = [{
     "name": "New issue tracking system",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
     "status" : "Idea",
-    "owner" : "Bob"
+    "owner" : "Jim"
 }, {
     "id": 2,
     "name": "Revamp build scripts",
@@ -28,7 +28,7 @@ var ideas = [{
     "name": "New phone triage",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce accumsan quis justo quis hendrerit. Curabitur a ante neque. Fusce nec mauris sodales, auctor sem at, luctus eros. Praesent aliquam nibh neque. Duis ut suscipit justo, id consectetur orci. Curabitur ultricies nunc eu enim dignissim, sed laoreet odio blandit.",
     "status" : "Mind Mapped",
-    "owner" : "Phil"
+    "owner" : "Jim"
 }, {
     "id": 4,
     "name": "Implement containerization",
@@ -50,7 +50,15 @@ app.get('/message', function (req, res) {
 })
 
 app.get('/ideas', function (req, res) {
-    res.end(JSON.stringify(ideas));
+    var count = req.query.count != undefined ? req.query.count :  req.query.count = 100;
+    if(req.query.owner){
+        var ownerIdeas = ideas.filter(function(idea) {
+            return idea.owner == req.query.owner
+        });
+        res.end(JSON.stringify(ownerIdeas.slice(0, count)));
+    }
+    
+    res.end(JSON.stringify(ideas.slice(0, count)));
 })
 
 app.get('/ideas/:id', function (req, res) {
@@ -76,10 +84,10 @@ app.post('/ideas', function (req, res) {
     res.status(201).end(JSON.stringify(newIdea));
 })
 
-app.put('/ideas', function (req, res) {
+app.put('/ideas/:id', function (req, res) {
     var idea;
     for (var i = 0; i < ideas.length; i++) {
-        if(ideas[i].id == req.body.id){
+        if(ideas[i].id == req.params.id){
             ideas[i].name = req.body.name;
             ideas[i].owner = req.body.owner;
             ideas[i].description = req.body.description;
