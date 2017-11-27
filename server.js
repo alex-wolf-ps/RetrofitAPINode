@@ -45,20 +45,12 @@ var ideas = [{
 
 var message = "Thanks for visiting the app!  Our next hackathon is scheduled for the end of Q3.  We hope to see you there, be sure to add your ideas to the app!";
 
-app.get('/message', function (req, res) {
+app.get('/messages', function (req, res) {
     res.end(JSON.stringify(message));
 })
 
 app.get('/ideas', function (req, res) {
-    var count = req.query.count != undefined ? req.query.count :  req.query.count = 100;
-    if(req.query.owner){
-        var ownerIdeas = ideas.filter(function(idea) {
-            return idea.owner == req.query.owner
-        });
-        res.end(JSON.stringify(ownerIdeas.slice(0, count)));
-    }
-    
-    res.end(JSON.stringify(ideas.slice(0, count)));
+    res.end(JSON.stringify(ideas));
 })
 
 app.get('/ideas/:id', function (req, res) {
@@ -84,10 +76,10 @@ app.post('/ideas', function (req, res) {
     res.status(201).end(JSON.stringify(newIdea));
 })
 
-app.put('/ideas/:id', function (req, res) {
+app.put('/ideas', function (req, res) {
     var idea;
     for (var i = 0; i < ideas.length; i++) {
-        if(ideas[i].id == req.params.id){
+        if(ideas[i].id == req.body.id){
             ideas[i].name = req.body.name;
             ideas[i].owner = req.body.owner;
             ideas[i].description = req.body.description;
