@@ -76,10 +76,10 @@ app.post('/ideas', function (req, res) {
     res.status(201).end(JSON.stringify(newIdea));
 })
 
-app.put('/ideas', function (req, res) {
+app.put('/ideas/:id', function (req, res) {
     var idea;
     for (var i = 0; i < ideas.length; i++) {
-        if(ideas[i].id == req.body.id){
+        if(ideas[i].id == req.params.id){
             ideas[i].name = req.body.name;
             ideas[i].owner = req.body.owner;
             ideas[i].description = req.body.description;
